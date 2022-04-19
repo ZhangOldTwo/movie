@@ -2,15 +2,11 @@ package com.hw.movie.ui;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.arcsoft.face.ErrorInfo;
-import com.arcsoft.face.FaceEngine;
 import com.hw.movie.R;
 import com.hw.movie.adapter.MyFragmentPagerAdapter;
 import com.hw.movie.base.BaseActivity;
@@ -20,9 +16,6 @@ import com.hw.movie.ui.fragment.MyFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.hw.movie.common.Constants.APP_ID;
-import static com.hw.movie.common.Constants.SDK_KEY;
 
 public class MainActivity extends BaseActivity {
     private ViewPager viewPager;
@@ -36,18 +29,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        if (!checkPermissions(NEEDED_PERMISSIONS)) {
-            ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, 666);
-        }else {
-            int code = FaceEngine.activeOnline(this, APP_ID, SDK_KEY);
-            if(code == ErrorInfo.MOK){
-                Log.i(getClass().getSimpleName(), "activeOnline success");
-            }else if(code == ErrorInfo.MERR_ASF_ALREADY_ACTIVATED){
-                Log.i(getClass().getSimpleName(), "already activated");
-            }else{
-                Log.i(getClass().getSimpleName(), "activeOnline failed, code is : " + code);
-            }
-        }
 
 
 
@@ -129,19 +110,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void afterRequestPermission(int requestCode, boolean isAllGranted) {
-        if (requestCode == 666) {
-            if (isAllGranted) {
-                int code = FaceEngine.activeOnline(this, APP_ID, SDK_KEY);
-                if(code == ErrorInfo.MOK){
-                    Log.i(getClass().getSimpleName(), "activeOnline success");
-                }else if(code == ErrorInfo.MERR_ASF_ALREADY_ACTIVATED){
-                    Log.i(getClass().getSimpleName(), "already activated");
-                }else{
-                    Log.i(getClass().getSimpleName(), "activeOnline failed, code is : " + code);
-                }
-            } else {
-                showToast(getString(R.string.permission_denied));
-            }
-        }
+
     }
 }

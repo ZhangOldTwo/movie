@@ -10,8 +10,8 @@ import com.github.ihsg.patternlocker.OnPatternChangeListener;
 import com.github.ihsg.patternlocker.PatternIndicatorView;
 import com.github.ihsg.patternlocker.PatternLockerView;
 import com.hw.movie.R;
-import com.hw.movie.common.Constants;
 import com.hw.movie.base.BaseActivity;
+import com.hw.movie.common.Constants;
 import com.tencent.mmkv.MMKV;
 
 import java.util.List;
@@ -70,13 +70,8 @@ public class PatternUnlockActivity extends BaseActivity {
                 }
 
                 if (string.equals(password)) {
-                    if (mmkv.decodeBool(Constants.IS_FACE, false)) {
-                        startActivity(new Intent(PatternUnlockActivity.this, FaceLoginActivity.class));
-                        finish();
-                    }else {
-                        startActivity(new Intent(PatternUnlockActivity.this, MainActivity.class));
-                        PatternUnlockActivity.this.finish();
-                    }
+                    startActivity(new Intent(PatternUnlockActivity.this, MainActivity.class));
+                    PatternUnlockActivity.this.finish();
                 } else {
 //                        oldList.clear();
                     unlockPatternLockView.updateStatus(true);

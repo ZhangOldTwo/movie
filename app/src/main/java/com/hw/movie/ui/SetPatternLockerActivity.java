@@ -12,8 +12,8 @@ import com.github.ihsg.patternlocker.OnPatternChangeListener;
 import com.github.ihsg.patternlocker.PatternIndicatorView;
 import com.github.ihsg.patternlocker.PatternLockerView;
 import com.hw.movie.R;
-import com.hw.movie.common.Constants;
 import com.hw.movie.base.BaseActivity;
+import com.hw.movie.common.Constants;
 import com.tencent.mmkv.MMKV;
 
 import java.util.ArrayList;

@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.hw.movie.R;
-import com.hw.movie.common.Constants;
 import com.hw.movie.base.BaseActivity;
+import com.hw.movie.common.Constants;
 import com.hw.movie.tools.StatusBarHelper;
 import com.tencent.mmkv.MMKV;
 
@@ -36,9 +36,6 @@ public class SplashActivity extends BaseActivity {
                 MMKV kv = MMKV.defaultMMKV();
                 if (kv.decodeBool(Constants.IS_LOCK, false)) {
                     startActivity(new Intent(SplashActivity.this, PatternUnlockActivity.class));
-                    finish();
-                } else if (kv.decodeBool(Constants.IS_FACE, false)) {
-                    startActivity(new Intent(SplashActivity.this, FaceLoginActivity.class));
                     finish();
                 } else {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));

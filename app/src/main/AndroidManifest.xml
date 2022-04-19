@@ -62,15 +62,9 @@
             android:name="com.hw.movie.ui.SetPatternLockerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.hw.movie.ui.FaceLoginActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
-        <activity
             android:name="com.hw.movie.ui.WebViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:hardwareAccelerated="true" />
-        <activity
-            android:name="com.hw.movie.ui.FaceRegisterActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <activity
             android:name="com.hw.movie.ui.PatternUnlockActivity"

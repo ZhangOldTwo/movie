@@ -18,8 +18,6 @@ import android.widget.Toast;
 import com.hw.movie.R;
 import com.hw.movie.common.Constants;
 import com.hw.movie.event.MessageEvent;
-import com.hw.movie.faceserver.FaceServer;
-import com.hw.movie.ui.FaceRegisterActivity;
 import com.hw.movie.ui.SetPatternLockerActivity;
 import com.suke.widget.SwitchButton;
 import com.tencent.mmkv.MMKV;
@@ -30,11 +28,10 @@ public class MyFragment extends Fragment {
 
     // 记录N次时间戳的数组
     long[] mHits = null;
-    private SwitchButton sbGgesture, sbFace, sbHappy;
+    private SwitchButton sbGgesture,  sbHappy;
     private ImageView mineIcon;
     private LinearLayout llHappy;
     private boolean isLock;
-    private boolean isFace;
     private boolean isHappy;
     private MMKV mmkv;
 
@@ -43,7 +40,6 @@ public class MyFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my, container, false);
         sbGgesture = rootView.findViewById(R.id.switch_gesture);
-        sbFace = rootView.findViewById(R.id.switch_face);
         sbHappy = rootView.findViewById(R.id.switch_happy);
         llHappy = rootView.findViewById(R.id.ll_happy);
         mineIcon = rootView.findViewById(R.id.mine_icon);
@@ -57,10 +53,8 @@ public class MyFragment extends Fragment {
         super.onResume();
         mmkv = MMKV.defaultMMKV();
         isLock = mmkv.decodeBool(Constants.IS_LOCK);
-        isFace = mmkv.decodeBool(Constants.IS_FACE);
         isHappy = mmkv.decodeBool(Constants.IS_HAPPY, false);
         sbGgesture.setChecked(isLock);
-        sbFace.setChecked(isFace);
         if (isHappy) {
             llHappy.setVisibility(View.VISIBLE);
             sbHappy.setChecked(isHappy);
@@ -88,16 +82,6 @@ public class MyFragment extends Fragment {
                     showCloseLockerDialog();
                 }
 
-            }
-        });
-        sbFace.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                if (isChecked && !isFace) {
-                    showOpenFaceDialog();
-                } else if (!isChecked && isFace) {
-                    showCloseFaceDialog();
-                }
             }
         });
 
@@ -195,83 +179,6 @@ public class MyFragment extends Fragment {
 
     }
 
-    private void showOpenFaceDialog() {
-        final AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
-                .setTitle("提示")
-                .setMessage("当前无图片及人脸特征，是否先去设置？")
-                .setIcon(R.mipmap.icon)
-                .setPositiveButton("是", new DialogInterface.OnClickListener() {//添加"Yes"按钮
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivity(new Intent(getActivity(), FaceRegisterActivity.class));
-                    }
-                })
-
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        sbFace.setChecked(false);
-                    }
-                })
-                .create();
-        alertDialog2.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    alertDialog2.dismiss();
-                    sbGgesture.setChecked(false);
-                }
-
-                return true;
-            }
-        });
-        alertDialog2.show();
-    }
-
-    private void showCloseFaceDialog() {
-        int faceNum = FaceServer.getInstance().getFaceNumber(getActivity());
-        if (faceNum == 0) {
-            mmkv.encode(Constants.IS_FACE, false);
-            isFace = false;
-            String str = getResources().getString(R.string.batch_process_no_face_need_to_delete);
-            Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT).show();
-
-        } else {
-            final AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
-                    .setTitle("提示")
-                    .setMessage(getString(R.string.batch_process_confirm_delete, faceNum))
-                    .setIcon(R.mipmap.icon)
-                    .setPositiveButton("是", new DialogInterface.OnClickListener() {//添加"Yes"按钮
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            int deleteCount = FaceServer.getInstance().clearAllFaces(getActivity());
-                            Toast.makeText(getActivity(), "人脸特征已删除，下次使用需重新录入", Toast.LENGTH_SHORT).show();
-                            mmkv.encode(Constants.IS_FACE, false);
-                            isFace = false;
-                        }
-                    })
-
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            sbFace.setChecked(true);
-                        }
-                    })
-                    .create();
-            alertDialog2.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                @Override
-                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        alertDialog2.dismiss();
-                        sbFace.setChecked(true);
-                    }
-                    return true;
-                }
-            });
-            alertDialog2.show();
-        }
-    }
 
     private void showOpenHappyModelDialog() {
         final AlertDialog alertDialog2 = new AlertDialog.Builder(getActivity())
